@@ -2,14 +2,24 @@ using UnityEngine;
 
 public class LadderMovement : MonoBehaviour
 {
-    private float vertical;
-    private float speed = 8f;
-    private bool isLadder;
-    private bool isClimbing;
+    public float vertical;
+    public float speed = 8f;
+    public bool isLadder;
+    public bool isClimbing;
 
-    [SerializeField] private Rigidbody2D rb;
+    Rigidbody2D rb;
+
+    void Start ()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     void Update()
+    {
+        Climbing();
+    }
+
+    void Climbing()
     {
         vertical = Input.GetAxisRaw("Vertical");
 
@@ -19,31 +29,32 @@ public class LadderMovement : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (isClimbing)
-        {
-            rb.gravityScale = 0f;
-            rb.velocity = new Vector2(rb.velocity.x, vertical * speed);
-        }
-        else
-        {
-            rb.gravityScale = 4f;
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Ladder"))
+        if (other.CompareTag("Ladder"))
         {
             isLadder = true;
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D other) 
     {
-        if (collision.CompareTag("Ladder"))
+        if (other.CompareTag("Ladder"))
         {
+            if (isClimbing)
+            {
+                rb.gravityScale = 0f;
+                rb.velocity = new Vector2(rb.velocity.x, vertical * speed);
+            }
+        }  
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Ladder"))
+        {
+            rb.gravityScale = 1f;
+            rb.velocity = rb.velocity.normalized;
             isLadder = false;
             isClimbing = false;
         }
