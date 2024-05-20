@@ -5,14 +5,14 @@ using UnityEngine;
 public class SmartPlatform : MonoBehaviour
 {
 
-    [SerializeField]
-    GameObject Player;
+    public GameObject Player;
 
     BoxCollider2D coll;
     // Start is called before the first frame update
     void Start()
     {
         coll = GetComponent<BoxCollider2D>();
+        Player = GameObject.Find("Player");
     }
 
     // Update is called once per frame

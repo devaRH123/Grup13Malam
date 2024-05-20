@@ -19,7 +19,7 @@ public class PlayerControl : MonoBehaviour
     public float jumpPower = 8;
 
     [SerializeField]
-    bool onGround;
+    public bool onGround;
 
     public bool onBox;
 
@@ -40,7 +40,7 @@ public class PlayerControl : MonoBehaviour
     public bool isFacingRight;
 
     public BoxBehaviour boxBeh;
-    // Start is called before the first frame update
+   
     void Start()
     {
         playerRB = GetComponent<Rigidbody2D>();
@@ -54,7 +54,6 @@ public class PlayerControl : MonoBehaviour
         box = GameObject.FindWithTag("Box");
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (onGround ==  false || (onGround && boxBeh.isGrabbed == true && boxBeh.onGround == false))
@@ -72,7 +71,6 @@ public class PlayerControl : MonoBehaviour
 
     void Movement()
     {
-        // Monitor horizontal key presses and apply movement to player object
         hAxis = Input.GetAxis("Horizontal");
         direction = new Vector2(hAxis, 0);
         transform.Translate(direction * Time.deltaTime * speed);
@@ -81,7 +79,6 @@ public class PlayerControl : MonoBehaviour
 
     void Jump()
     {
-        // if spacebar pressed then apply velocity to playerRB on yaxis
         if (Input.GetKeyDown(KeyCode.Space) && (onGround == true || onBox == true))
         {
             playerRB.velocity = new Vector2(0, 1) * jumpPower;
@@ -116,7 +113,6 @@ public class PlayerControl : MonoBehaviour
 
     void Animations()
     {
-        // if player is moving play running animation
         animator.SetFloat("Moving", Mathf.Abs(hAxis));
         animator.SetBool("onGround", onGround);
     }
@@ -136,8 +132,6 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    
-
     void UnPushBox()
     {
         box.GetComponent<FixedJoint2D>().enabled = false;
@@ -151,10 +145,9 @@ public class PlayerControl : MonoBehaviour
         Gizmos.DrawLine(transform.position, (Vector2)transform.position + direction * gizDistance);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
-        // if trigger enter object with tag "ground" then onGround = true
-        if (other.tag == "ground")
+        if (other.tag == "ground" || other.tag == "TopLadder")
         {
             onGround = true;
         }
@@ -163,23 +156,11 @@ public class PlayerControl : MonoBehaviour
         {
             onBox = true;
         }
-
-        // if (other.tag == "enemy")
-        // {
-        //     livesScript.ReduceLives();
-        // }
-
-        if (other.tag == "collectible")
-        {
-            audioSource.clip = audioClips[0];
-            audioSource.Play();
-        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        // if trigger exits object with tag "ground" then onGround = false
-        if (other.tag == "ground" )
+        if (other.tag == "ground" || other.tag == "TopLadder")
         {
             onGround = false;
         }

@@ -433,6 +433,7 @@
 "Assets/Scripts/PlayerControl.cs"
 "Assets/Scripts/PressurePlateBehaviour.cs"
 "Assets/Scripts/SmartPlatform.cs"
+"Assets/Scripts/TopLadderBehaviour.cs"
 "Assets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers/PropertyProvider_TMPro_HorizontalAlignmentOptions.cs"
 "Assets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers/PropertyProvider_TMPro_TextAlignmentOptions.cs"
 "Assets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers/PropertyProvider_TMPro_TMP_Character.cs"
