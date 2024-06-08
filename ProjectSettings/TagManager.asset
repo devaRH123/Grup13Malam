@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ladder
+  - Box
+  - switches
+  - Bouncer
+  - ground
+  - TopLadder
   layers:
   - Default
   - TransparentFX
