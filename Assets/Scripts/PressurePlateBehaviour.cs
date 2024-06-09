@@ -1,40 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PressurePlateBehaviour : MonoBehaviour
 {
     public bool pressed = false;
-    public bool boxPressed = false;
-   
-    void OnTriggerEnter2D(Collider2D collider)
+    [SerializeField]
+    Sprite inactive;    
+    [SerializeField]
+    Sprite active;
+    public UniversalActivator activator;
+    void OnTriggerStay2D(Collider2D collider)
     {
-        if(collider.tag == "Player" || collider.tag == "Box")
+        GetComponent<SpriteRenderer>().sprite = active;
+        if(collider.tag == "Player" || collider.tag == "Pushable")
         {
-            if (collider.tag == "Player")
-            {
-                pressed = true;
-            }
-            if (collider.tag == "Box")
-            {
-                boxPressed = true;
-            }
+            pressed = true;
+            activator.activated = true;
         }
     }
 
     void OnTriggerExit2D(Collider2D collider)
     {
-        if(collider.tag == "Player" || collider.tag == "Box")
+        GetComponent<SpriteRenderer>().sprite = inactive;
+        if(collider.tag == "Player" || collider.tag == "Pushable")
         {
-            if (collider.tag == "Player")
-            {
-                pressed = false;
-                
-            }
-            else if (collider.tag == "Box")
-            {
-                boxPressed = false;
-            }
+            pressed = false;
+            activator.activated = false;
         }
     }
 }

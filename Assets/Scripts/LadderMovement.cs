@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class LadderMovement : MonoBehaviour
 {
-    public float vertical;
-    public float speed = 8f;
-    public bool isClimbing;
-    
+    float vertical;
+    [SerializeField]
+    public float speed;
+    bool isClimbing;
     Rigidbody2D rb;
 
     void Start ()

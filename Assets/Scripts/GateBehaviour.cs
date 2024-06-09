@@ -1,42 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static LeanTween;
 
 public class GateBehaviour : MonoBehaviour
 {
-    public PressurePlateBehaviour pressPlate;
-    Vector2 initPos;
-
+    Collider2D coll;
+    Animator animator;
+    bool activator;
     void Start()
     {
-        initPos = transform.position;
+        coll = transform.GetChild(0).gameObject.transform.GetComponent<BoxCollider2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        if (pressPlate.pressed || pressPlate.boxPressed)
+        activator = GetComponent<UniversalActivator>().activated;
+        if (activator)
         {
-            StartCoroutine(MoveGateUp());
+            coll.enabled = false;
+            animator.SetBool("Active", activator);
         }
         else
         {
-            StartCoroutine(MoveGateDown());
+            coll.enabled = true;
+            animator.SetBool("Active", activator);
         }
-    }
-
-    IEnumerator MoveGateUp()
-    {
-        Vector2 newPos = initPos + Vector2.up * 1.5f;
-        newPos.y = Mathf.Clamp(newPos.y, initPos.y, initPos.y + 1.5f);
-        moveLocalY(gameObject, newPos.y, 0.3f).setEase(LeanTweenType.easeOutSine);
-        yield return new WaitForSeconds(0.3f);
-    }
-
-    IEnumerator MoveGateDown()
-    {
-        yield return new WaitForSeconds(0.3f);
-        moveLocalY(gameObject, initPos.y, 0.3f).setEase(LeanTweenType.easeOutSine);
-        yield return new WaitForSeconds(0.3f);
     }
 }
