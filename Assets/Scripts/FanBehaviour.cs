@@ -9,7 +9,7 @@ public class FanBehaviour : MonoBehaviour
     void Start()
     {
         wind = transform.GetChild(0).gameObject;
-        animator = transform.GetChild(1).gameObject.GetComponent<Animator>();
+        animator = transform.GetChild(1).GetComponent<Animator>();
     }
 
     void Update()

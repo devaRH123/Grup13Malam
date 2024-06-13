@@ -3,8 +3,7 @@ using UnityEngine;
 public class LadderMovement : MonoBehaviour
 {
     float vertical;
-    [SerializeField]
-    public float speed;
+    [SerializeField] float speed;
     bool isClimbing;
     Rigidbody2D rb;
 
@@ -30,12 +29,12 @@ public class LadderMovement : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other) 
     {
-        if ((other.CompareTag("Ladder") || other.CompareTag("TopLadder")) && isClimbing == true)
+        if (other.CompareTag("Ladder") && isClimbing == true)
         {
             rb.gravityScale = 0f;
             rb.velocity = new Vector2(rb.velocity.x, vertical * speed);
         }  
-        if ((other.CompareTag("Ladder") || other.CompareTag("TopLadder")) && transform.position.y > other.transform.position.y && Input.GetAxisRaw("Vertical") < 0){
+        if (other.CompareTag("Ladder") && transform.position.y > other.transform.position.y && Input.GetAxisRaw("Vertical") < 0){
             other.isTrigger = true;
             isClimbing = true;
         }
@@ -43,7 +42,7 @@ public class LadderMovement : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Ladder") || other.CompareTag("TopLadder"))
+        if (other.CompareTag("Ladder"))
         {
             isClimbing = false;        
             rb.gravityScale = 1f;

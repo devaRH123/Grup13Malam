@@ -1,22 +1,24 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class FallTrigger : MonoBehaviour
 {
-    [SerializeField]
-    Transform Player;
+    GameObject Player;
 
-    private void Update()
+    void Start()
     {
-        transform.position = new Vector2(Player.position.x, -9.5f);
+        Player = GameObject.Find("Player");
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void Update()
     {
-        // when the player triggers enter restart the level/scene
-        if(other.tag == "Player")
+        transform.position = new Vector2(Player.transform.position.x, -9.5f);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("Player"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            Player.GetComponent<PlayerControl>().Death();
         }
     }
 }

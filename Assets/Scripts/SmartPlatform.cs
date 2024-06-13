@@ -4,27 +4,56 @@ public class SmartPlatform : MonoBehaviour
 {
 
     public GameObject Player;
-
-    BoxCollider2D coll;
+    BoxCollider2D[] coll;
+    [SerializeField] bool playerOntrigger;
     void Start()
     {
-        coll = GetComponent<BoxCollider2D>();
-        Player = GameObject.Find("Player");
+        coll = GetComponents<BoxCollider2D>();
+        // Player = GameObject.Find("Player");
     }
 
     void Update()
     {
-        if(Player.transform.position.y < transform.position.y)
+        if (playerOntrigger)
         {
-            coll.enabled = false;
+            if (Player.transform.position.y > transform.position.y)
+            {
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    coll[0].excludeLayers = LayerMask.GetMask("Player"); 
+                }
+                else if(Input.GetKeyUp(KeyCode.S)) 
+                {
+                    coll[0].excludeLayers = LayerMask.GetMask("");
+                }
+            }
+            else
+            {
+                coll[0].excludeLayers = LayerMask.GetMask("Player"); 
+            }
         }
-        if(Player.transform.position.y > transform.position.y)
+        else
         {
-            coll.enabled = true;
+            coll[0].excludeLayers = LayerMask.GetMask("");
         }
-        if(Input.GetAxis("Vertical") < 0)
+    }
+
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if(other.CompareTag("Player"))
         {
-            coll.enabled = false;
+            playerOntrigger = true;
+            Player = other.gameObject;            
+        }        
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.CompareTag("Player"))
+        {
+            playerOntrigger = false;
+            Player = null;
         }
     }
 }

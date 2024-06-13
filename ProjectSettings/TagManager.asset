@@ -3,17 +3,25 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Hazard
+  - CameraZone
+  - ground
+  - Pushable
+  - Ladder
+  - Bouncer
+  - Switches
+  - MovingPlatform
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Passable Platform
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Impassable Platform
+  - Player
+  - Pushables
   - 
   - 
   - 

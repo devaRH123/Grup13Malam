@@ -4,76 +4,64 @@ using UnityEngine.SceneManagement;
 public class PlayerControl : MonoBehaviour
 {
     Rigidbody2D playerRB;
-    BoxCollider2D boxColl;
-    CapsuleCollider2D capsColl;
     SpriteRenderer spriteRenderer;
     float hAxis;
     Vector2 direction;
-    [SerializeField]
-    float speed = 5;
-    [SerializeField]
-    float jumpPower = 8;
-    [SerializeField]
-    bool onGround;
-    [SerializeField]
-    bool onBox;
+    public float speed;
+    [SerializeField] float jumpPower;
+    [SerializeField] bool onGround;
     Animator animator;
-    [SerializeField]
-    AudioClip[] audioClips;
+    [SerializeField] AudioClip[] audioClips;
     AudioSource audioSource;
-    [SerializeField]
-    // Lives livesScript;
-    public float gizDistance = 0.5f;
-    [SerializeField]
-    LayerMask boxMask;
+    [SerializeField] float gizDistance;
+    Vector2 gizPosition;
+    [SerializeField] LayerMask boxMask;
     GameObject pushable;
     public bool isFacingRight;
     public PushableBehaviour pushBeh;
-   
+    public Transform lastCheckpoint;
     void Start()
     {
         playerRB = GetComponent<Rigidbody2D>();
-        boxColl = GetComponent<BoxCollider2D>();
-        capsColl = GetComponent<CapsuleCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
+        // audioSource = GetComponent<AudioSource>();
         direction = Vector2.right;
         isFacingRight = true;
         pushable = GameObject.FindWithTag("Pushable");
         pushBeh = pushable.GetComponent<PushableBehaviour>();
+        transform.position = lastCheckpoint.position;
     }
 
     void Update()
     {
-        if (onGround ==  false || (onGround && pushBeh.isGrabbed == true && pushBeh.onGround == false))
-        {   
-           UnPush();
-        }
-        Movement();
-        if (Input.GetKeyDown(KeyCode.E))
-            PushBox();
-        if (Input.GetKeyUp(KeyCode.E))
-            UnPush();
-        Jump();
         Animations();
+        Jump();
+        Movement();
+        gizPosition = new(transform.position.x ,transform.position.y + 0.34f);
+        if (Input.GetKeyDown(KeyCode.E)) PushBox();
+    }
+    void LateUpdate()
+    {
+        if (Input.GetKeyUp(KeyCode.E) || !onGround || (onGround && pushBeh.isGrabbed && !pushBeh.onGround)) UnPush();        
     }
 
     public void Movement()
     {
         hAxis = Input.GetAxis("Horizontal");
         direction = new Vector2(hAxis, 0);
-        transform.Translate(direction * Time.deltaTime * speed);
+        transform.Translate(speed * Time.deltaTime * direction);
         Facing();
     }
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && (onGround == true || onBox == true))
+        if (Input.GetKeyDown(KeyCode.Space) && onGround == true)
         {
+            animator.Play("Base Layer.Player_JumpOff", 0, 0);
             playerRB.velocity = new Vector2(0, 1) * jumpPower;
-            audioSource.clip = audioClips[1];
-            audioSource.Play();
+            // audioSource.clip = audioClips[1];
+            // audioSource.Play();
         }
     }
 
@@ -81,21 +69,11 @@ public class PlayerControl : MonoBehaviour
     {
         if (hAxis > 0 && !isFacingRight && pushBeh.isGrabbed == false)
         {
-            boxColl.offset = new Vector2(-0.03118515f,0);
-            boxColl.size = new Vector2(0.8211477f,1);
-            
-            capsColl.offset = new Vector2(-0.02831477f, -0.4838917f);
-            capsColl.size = new Vector2(0.5875146f, 0.1175466f);
             spriteRenderer.flipX = false;
             isFacingRight = true;
         }
         else if (hAxis < 0 && isFacingRight && pushBeh.isGrabbed == false)
         {
-            boxColl.offset = new Vector2(0.03141856f,0);
-            boxColl.size = new Vector2(0.8177637f,1);
-
-            capsColl.offset = new Vector2(0.03599472f, -0.4838917f);
-            capsColl.size = new Vector2(0.5691428f, 0.1175466f);
             spriteRenderer.flipX = true;
             isFacingRight = false;
         }
@@ -111,8 +89,8 @@ public class PlayerControl : MonoBehaviour
     {
         direction = isFacingRight ? Vector2.right : Vector2.left;
         Physics2D.queriesStartInColliders = false;
-        RaycastHit2D ray = Physics2D.Raycast(transform.position, direction * transform.localScale.x, gizDistance, boxMask);
-        if (ray.collider != null && ray.collider.gameObject.tag == "Pushable" && onGround)
+        RaycastHit2D ray = Physics2D.Raycast(gizPosition, direction * transform.localScale.x, gizDistance, boxMask);
+        if (ray.collider != null && ray.collider.gameObject.CompareTag("Pushable") && onGround)
         {
             pushable = ray.collider.gameObject;
             pushBeh = pushable.GetComponent<PushableBehaviour>();
@@ -124,39 +102,31 @@ public class PlayerControl : MonoBehaviour
 
     void UnPush()
     {
+        pushable.GetComponent<FixedJoint2D>().connectedBody = null;
+        pushable.GetComponent<FixedJoint2D>().connectedAnchor = Vector2.zero;
         pushable.GetComponent<FixedJoint2D>().enabled = false;
         pushBeh.isGrabbed = false;
     }
 
-    private void OnDrawGizmos()
+    public void Death()
     {
-        direction = isFacingRight ? Vector2.right : Vector2.left;
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, (Vector2)transform.position + direction * gizDistance);
+        transform.position = lastCheckpoint.position;
+        if (pushBeh.isGrabbed) UnPush();
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.tag == "ground" || other.tag == "TopLadder")
+        if (other.CompareTag("ground") || other.CompareTag("Pushable") || other.CompareTag("Bouncer") || other.CompareTag("MovingPlatform"))
         {
             onGround = true;
-        }
-
-        if (other.tag == "Pushable" || other.tag == "Bouncer")
-        {
-            onBox = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == "ground" || other.tag == "TopLadder")
+        if (other.CompareTag("ground") || other.CompareTag("Pushable") || other.CompareTag("Bouncer") || other.CompareTag("MovingPlatform"))
         {
             onGround = false;
-        }
-        if (other.tag == "Pushable" || other.tag == "Bouncer")
-        {
-            onBox = false;            
         }
     }
 }

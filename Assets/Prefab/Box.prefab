@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1441348732000022615}
   - component: {fileID: 4777883423729653322}
   - component: {fileID: 5236400542978817862}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Box
   m_TagString: Pushable
   m_Icon: {fileID: 0}
@@ -32,8 +32,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.98, y: -0.2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.2947001, y: 1.2947001, z: 1.2947001}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -101,7 +101,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 0.9950387
+  m_Mass: 1.549805
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -128,7 +128,7 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 01e84e507d94d96488f0d74c690cac35, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -148,7 +148,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0006622374, y: 0}
+  m_Offset: {x: 0.0000718534, y: -0.00006234646}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -159,7 +159,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9950387, y: 1}
+  m_Size: {x: 0.9614087, y: 0.9616802}
   m_EdgeRadius: 0
 --- !u!70 &1441348732000022615
 CapsuleCollider2D:
@@ -193,8 +193,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0007421182, y: -0.66183656}
-  m_Size: {x: 1.0680734, y: 0.056775577}
+  m_Offset: {x: 0.0035018208, y: -0.5158987}
+  m_Size: {x: 0.9485567, y: 0.121309794}
   m_Direction: 1
 --- !u!255 &4777883423729653322
 FixedJoint2D:
@@ -205,14 +205,14 @@ FixedJoint2D:
   m_GameObject: {fileID: 90641346837596259}
   m_Enabled: 0
   serializedVersion: 4
-  m_EnableCollision: 1
+  m_EnableCollision: 0
   m_ConnectedRigidBody: {fileID: 0}
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
-  m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: -16.72, y: -1.493}
+  m_Anchor: {x: 0, y: 0.32}
+  m_ConnectedAnchor: {x: -0.98, y: 0.21430404}
   m_DampingRatio: 0
   m_Frequency: 0
 --- !u!114 &5236400542978817862
@@ -227,6 +227,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69a2ca6e1c8a2ef458b7cf20d181d7d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onGround: 1
+  onGround: 0
   isGrabbed: 0
-  followDistance: 0.9
+  followDistance: 1.1

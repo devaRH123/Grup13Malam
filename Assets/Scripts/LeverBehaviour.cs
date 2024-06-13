@@ -4,8 +4,7 @@ public class LeverBehaviour : MonoBehaviour
 {
     GameObject Player;
     Animator animator;
-    [SerializeField]
-    UniversalActivator activator;
+    [SerializeField] UniversalActivator activator;
 
     void Start()
     {
@@ -15,7 +14,7 @@ public class LeverBehaviour : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E) && isInRange()){
+        if(Input.GetKeyDown(KeyCode.E) && IsInRange()){
             activator.activated = !activator.activated;
             animator.SetBool("Active", activator.activated);
         }
@@ -23,7 +22,7 @@ public class LeverBehaviour : MonoBehaviour
             animator.SetBool("Active", activator.activated);
     }
 
-    bool isInRange()
+    bool IsInRange()
     {
         return Vector2.Distance(transform.position, Player.transform.position) <= 0.2f;
     }

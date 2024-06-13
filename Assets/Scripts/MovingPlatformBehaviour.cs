@@ -3,12 +3,9 @@ using UnityEngine;
 
 public class MovingPlatformBehaviour : MonoBehaviour
 {
-    [SerializeField]
-    Vector2 direction;
-    [SerializeField]
-    float distance;
-    [SerializeField]
-    float deltaMult;
+    [SerializeField] Vector2 direction;
+    [SerializeField] float distance;
+    [SerializeField] float deltaMult;
     bool isPlayerMoving;
     Vector2 initPos;
     Vector2 newPos;
@@ -16,21 +13,21 @@ public class MovingPlatformBehaviour : MonoBehaviour
     List<GameObject> targets = new();
     List<Vector2> objectOffsets = new();
     GameObject Player;
+    UniversalActivator activator;
     void Start()
     {
+        activator = GetComponent<UniversalActivator>();
         initPos = transform.position;
         newPos = initPos + direction * distance;
     }
 
     void Update()
     {
-        if (GetComponent<UniversalActivator>().activated)
+        Vector2 targetPos = activator.activated ? newPos : initPos;
+        transform.position = Vector2.MoveTowards(transform.position, targetPos, deltaMult * Time.fixedDeltaTime);
+        if (Player != null)
         {
-            transform.position = Vector2.MoveTowards(transform.position, newPos, deltaMult * Time.fixedDeltaTime);
-        }
-        else
-        {
-            transform.position = Vector2.MoveTowards(transform.position, initPos, deltaMult * Time.fixedDeltaTime);
+            Player.GetComponent<PlayerControl>().speed = (Vector2)transform.position == targetPos ? 2 : 4.5f;
         }
 
         isPlayerMoving = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D);
@@ -62,12 +59,12 @@ public class MovingPlatformBehaviour : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {        
-        if (other.tag != "Player" && !targets.Contains(other.gameObject))
+        if (!other.CompareTag("Player") && !targets.Contains(other.gameObject))
         {
             targets.Add(other.gameObject);
             objectOffsets.Add(other.gameObject.transform.position - transform.position);
         }
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             if (isPlayerMoving)
             {
@@ -90,7 +87,7 @@ public class MovingPlatformBehaviour : MonoBehaviour
             targets.RemoveAt(index);
             objectOffsets.RemoveAt(index);
         }
-        if(other.tag == "Player")
+        if(other.CompareTag("Player"))
         {
             Player = null;
         }
