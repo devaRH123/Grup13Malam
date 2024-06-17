@@ -24,8 +24,8 @@ public class MovingPlatformBehaviour : MonoBehaviour
     void Update()
     {
         Vector2 targetPos = activator.activated ? newPos : initPos;
-        transform.position = Vector2.MoveTowards(transform.position, targetPos, deltaMult * Time.fixedDeltaTime);
-        if (Player != null)
+        transform.position = Vector2.MoveTowards(transform.position, targetPos, deltaMult * Time.deltaTime);
+        if (Player != null && direction.x != 0)
         {
             Player.GetComponent<PlayerControl>().speed = (Vector2)transform.position == targetPos ? 2 : 4.5f;
         }

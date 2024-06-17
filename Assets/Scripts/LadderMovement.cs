@@ -2,41 +2,50 @@ using UnityEngine;
 
 public class LadderMovement : MonoBehaviour
 {
-    float vertical;
-    [SerializeField] float speed;
-    bool isClimbing;
     Rigidbody2D rb;
+    [SerializeField] float speed;
+    public bool onLadder;
+    bool onGround;
+    Animator animator;
 
     void Start ()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
-
-    void Update()
+    void Update ()
     {
-        Climbing();
-    }
-
-    void Climbing()
-    {
-        vertical = Input.GetAxisRaw("Vertical");
-
-        if (vertical > 0f)
+        onGround = animator.GetBool("onGround");
+        if(onLadder && !onGround)
         {
-            isClimbing = true;
+            animator.Play(  "Base Layer.Player_Climb", 0, 0);   
+        }
+        if(onLadder && onGround)
+        {
+            animator.Play(  "Base Layer.Player_Idle", 0, 0);   
         }
     }
 
     private void OnTriggerStay2D(Collider2D other) 
     {
-        if (other.CompareTag("Ladder") && isClimbing == true)
+        if (other.CompareTag("Ladder"))
         {
-            rb.gravityScale = 0f;
-            rb.velocity = new Vector2(rb.velocity.x, vertical * speed);
-        }  
-        if (other.CompareTag("Ladder") && transform.position.y > other.transform.position.y && Input.GetAxisRaw("Vertical") < 0){
-            other.isTrigger = true;
-            isClimbing = true;
+            float vAxis = Input.GetAxis("Vertical");
+            Vector2 direction = new(0, vAxis);
+            onLadder = true;
+            if(vAxis != 0)
+            { 
+                animator.SetBool("onLadder", onLadder);
+                animator.speed = 1;
+                transform.Translate(speed * Time.deltaTime * direction);
+
+                rb.gravityScale = 0f;
+                rb.velocity = Vector2.zero;
+            }
+            else if (vAxis == 0)
+            {
+                animator.speed = 0;
+            }
         }
     }
 
@@ -44,8 +53,9 @@ public class LadderMovement : MonoBehaviour
     {
         if (other.CompareTag("Ladder"))
         {
-            isClimbing = false;        
+            onLadder = false;        
             rb.gravityScale = 1f;
+            animator.SetBool("onLadder", onLadder = false);
         }
     }
 }

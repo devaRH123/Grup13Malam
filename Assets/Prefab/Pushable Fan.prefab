@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7674339873420043243
 Transform:
   m_ObjectHideFlags: 0
@@ -147,7 +147,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 1
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.000421077}
+  m_Offset: {x: 0.056353763, y: 1.0136867}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -158,7 +158,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.99915785}
+  m_Size: {x: 1.1127075, y: 3.0256882}
   m_EdgeRadius: 0
 --- !u!255 &8663717341667714885
 FixedJoint2D:
@@ -191,10 +191,10 @@ AreaEffector2D:
   m_UseColliderMask: 1
   m_ColliderMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 128
   m_UseGlobalAngle: 0
   m_ForceAngle: 90
-  m_ForceMagnitude: 0.02
+  m_ForceMagnitude: 37
   m_ForceVariation: 0
   m_ForceTarget: 0
   m_Drag: 3
@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 5946463338434110911}
   - component: {fileID: 1400042436868658390}
   - component: {fileID: 3564536780476333354}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pushable Fan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -326,11 +326,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1441348732000022615, guid: a4cc68c1f9add954ba73c57395da0cd7, type: 3}
       propertyPath: m_Size.x
-      value: 2.9512672
+      value: 3.0362966
+      objectReference: {fileID: 0}
+    - target: {fileID: 1441348732000022615, guid: a4cc68c1f9add954ba73c57395da0cd7, type: 3}
+      propertyPath: m_Size.y
+      value: 0.12130979
       objectReference: {fileID: 0}
     - target: {fileID: 1441348732000022615, guid: a4cc68c1f9add954ba73c57395da0cd7, type: 3}
       propertyPath: m_Offset.x
-      value: 0.003471296
+      value: -0.000012434379
+      objectReference: {fileID: 0}
+    - target: {fileID: 1441348732000022615, guid: a4cc68c1f9add954ba73c57395da0cd7, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.51589864
       objectReference: {fileID: 0}
     - target: {fileID: 3960249075449339785, guid: a4cc68c1f9add954ba73c57395da0cd7, type: 3}
       propertyPath: m_Mass
@@ -354,7 +362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5236400542978817862, guid: a4cc68c1f9add954ba73c57395da0cd7, type: 3}
       propertyPath: followDistance
-      value: 2.4
+      value: 2.27
       objectReference: {fileID: 0}
     - target: {fileID: 5238071095036383921, guid: a4cc68c1f9add954ba73c57395da0cd7, type: 3}
       propertyPath: m_Size.x

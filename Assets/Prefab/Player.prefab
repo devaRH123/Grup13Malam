@@ -54,8 +54,8 @@ Rigidbody2D:
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 0.001
+  m_UseAutoMass: 1
+  m_Mass: 1.8181915
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -515,7 +515,7 @@ MonoBehaviour:
   gizDistance: 1.16
   boxMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 256
   isFacingRight: 1
   pushBeh: {fileID: 0}
   lastCheckpoint: {fileID: 0}
@@ -531,7 +531,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5a096ecabb2bd8468a51f07de208457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
+  speed: 2
+  onLadder: 0
 --- !u!114 &5198503478249513313
 MonoBehaviour:
   m_ObjectHideFlags: 0

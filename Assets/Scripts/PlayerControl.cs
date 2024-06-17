@@ -4,13 +4,13 @@ using UnityEngine.SceneManagement;
 public class PlayerControl : MonoBehaviour
 {
     Rigidbody2D playerRB;
-    SpriteRenderer spriteRenderer;
+    SpriteRenderer sprite;
+    Animator animator;
     float hAxis;
     Vector2 direction;
     public float speed;
     [SerializeField] float jumpPower;
     [SerializeField] bool onGround;
-    Animator animator;
     [SerializeField] AudioClip[] audioClips;
     AudioSource audioSource;
     [SerializeField] float gizDistance;
@@ -18,18 +18,17 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] LayerMask boxMask;
     GameObject pushable;
     public bool isFacingRight;
-    public PushableBehaviour pushBeh;
+    [SerializeField] PushableBehaviour pushBeh;
     public Transform lastCheckpoint;
     void Start()
     {
         playerRB = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        sprite = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-        // audioSource = GetComponent<AudioSource>();
-        direction = Vector2.right;
-        isFacingRight = true;
         pushable = GameObject.FindWithTag("Pushable");
         pushBeh = pushable.GetComponent<PushableBehaviour>();
+        // audioSource = GetComponent<AudioSource>();
+        isFacingRight = true;
         transform.position = lastCheckpoint.position;
     }
 
@@ -41,25 +40,27 @@ public class PlayerControl : MonoBehaviour
         gizPosition = new(transform.position.x ,transform.position.y + 0.34f);
         if (Input.GetKeyDown(KeyCode.E)) PushBox();
     }
+    
     void LateUpdate()
     {
-        if (Input.GetKeyUp(KeyCode.E) || !onGround || (onGround && pushBeh.isGrabbed && !pushBeh.onGround)) UnPush();        
+        if (Input.GetKeyUp(KeyCode.E)) UnPush();
+        if (!onGround || (onGround && pushBeh.isGrabbed && !pushBeh.onGround)) UnPush();        
     }
 
     public void Movement()
     {
         hAxis = Input.GetAxis("Horizontal");
-        direction = new Vector2(hAxis, 0);
+        direction = new (hAxis, 0);
         transform.Translate(speed * Time.deltaTime * direction);
         Facing();
     }
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && onGround == true)
+        if (Input.GetKeyDown(KeyCode.Space) && onGround)
         {
-            animator.Play("Base Layer.Player_JumpOff", 0, 0);
             playerRB.velocity = new Vector2(0, 1) * jumpPower;
+            animator.Play("Base Layer.Player_JumpOff", 0, 0);
             // audioSource.clip = audioClips[1];
             // audioSource.Play();
         }
@@ -67,14 +68,14 @@ public class PlayerControl : MonoBehaviour
 
     void Facing()
     {
-        if (hAxis > 0 && !isFacingRight && pushBeh.isGrabbed == false)
-        {
-            spriteRenderer.flipX = false;
+        if (hAxis > 0 && !isFacingRight && !pushBeh.isGrabbed)
+        {      
+            sprite.flipX = false; 
             isFacingRight = true;
         }
-        else if (hAxis < 0 && isFacingRight && pushBeh.isGrabbed == false)
+        else if (hAxis < 0 && isFacingRight && !pushBeh.isGrabbed)
         {
-            spriteRenderer.flipX = true;
+            sprite.flipX = true;
             isFacingRight = false;
         }
     }
@@ -92,10 +93,12 @@ public class PlayerControl : MonoBehaviour
         RaycastHit2D ray = Physics2D.Raycast(gizPosition, direction * transform.localScale.x, gizDistance, boxMask);
         if (ray.collider != null && ray.collider.gameObject.CompareTag("Pushable") && onGround)
         {
+            animator.Play( isFacingRight ? "Base Layer.Player_Push" : "Base Layer.Player_Pull", 0, 0);
+            animator.SetBool("isPushPull", true);
             pushable = ray.collider.gameObject;
-            pushBeh = pushable.GetComponent<PushableBehaviour>();
             pushable.GetComponent<FixedJoint2D>().connectedBody = GetComponent<Rigidbody2D>();
             pushable.GetComponent<FixedJoint2D>().enabled = true;
+            pushBeh = pushable.GetComponent<PushableBehaviour>();
             pushBeh.isGrabbed = true;
         }
     }
@@ -106,6 +109,12 @@ public class PlayerControl : MonoBehaviour
         pushable.GetComponent<FixedJoint2D>().connectedAnchor = Vector2.zero;
         pushable.GetComponent<FixedJoint2D>().enabled = false;
         pushBeh.isGrabbed = false;
+        animator.SetBool("isPushPull", false);
+        if(Input.GetKeyUp(KeyCode.E))
+        {
+            if(!isFacingRight && !sprite.flipX) sprite.flipX = true; 
+            animator.Play( hAxis != 0 ? "Base Layer.Player_Idle" : "Base Layer.Player_Walk", 0, 0);
+        }
     }
 
     public void Death()
@@ -119,6 +128,7 @@ public class PlayerControl : MonoBehaviour
         if (other.CompareTag("ground") || other.CompareTag("Pushable") || other.CompareTag("Bouncer") || other.CompareTag("MovingPlatform"))
         {
             onGround = true;
+            animator.speed = 1;
         }
     }
 
