@@ -22,7 +22,7 @@ TagManager:
   - Impassable Platform
   - Player
   - Pushables
-  - 
+  - Backgrounds
   - 
   - 
   - 
@@ -48,4 +48,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background Objects
+    uniqueID: 851095475
+    locked: 0
+  - name: Foreground Objects
+    uniqueID: 695727519
     locked: 0

@@ -2,19 +2,18 @@ using UnityEngine;
 
 public class LeverBehaviour : MonoBehaviour
 {
-    GameObject Player;
     Animator animator;
+    bool IsInRange = false;
     [SerializeField] UniversalActivator activator;
 
     void Start()
     {
-        Player = GameObject.Find("Player");
         animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E) && IsInRange()){
+        if(Input.GetKeyDown(KeyCode.E) && IsInRange){
             activator.activated = !activator.activated;
             animator.SetBool("Active", activator.activated);
         }
@@ -22,8 +21,15 @@ public class LeverBehaviour : MonoBehaviour
             animator.SetBool("Active", activator.activated);
     }
 
-    bool IsInRange()
+    void OnTriggerStay2D(Collider2D other)
     {
-        return Vector2.Distance(transform.position, Player.transform.position) <= 0.2f;
+        if(other.CompareTag("Player"))
+            IsInRange = true;
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.CompareTag("Player"))
+            IsInRange = false;
     }
 }
