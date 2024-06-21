@@ -5,10 +5,12 @@ public class Teleport : MonoBehaviour
     public GameObject portal;
     GameObject player;
     bool isPlayerInTrigger = false;
-
+    AudioSource audioSource;
+    
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -38,6 +40,7 @@ public class Teleport : MonoBehaviour
     void TeleportPlayer()
     {
         player.transform.position = new Vector2(portal.transform.position.x, portal.transform.position.y - 1);
+        audioSource.Play();
     }
 }
 

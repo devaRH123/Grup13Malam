@@ -27,7 +27,7 @@ public class PlayerControl : MonoBehaviour
         animator = GetComponent<Animator>();
         pushable = GameObject.FindWithTag("Pushable");
         pushBeh = pushable.GetComponent<PushableBehaviour>();
-        // audioSource = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
         isFacingRight = true;
         transform.position = lastCheckpoint.position;
     }
@@ -61,8 +61,8 @@ public class PlayerControl : MonoBehaviour
         {
             playerRB.velocity = new Vector2(0, 1) * jumpPower;
             animator.Play("Base Layer.Player_JumpOff", 0, 0);
-            // audioSource.clip = audioClips[1];
-            // audioSource.Play();
+            audioSource.clip = audioClips[0];
+            audioSource.Play();
         }
     }
 

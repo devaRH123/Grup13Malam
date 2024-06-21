@@ -5,10 +5,12 @@ public class TrampolineBehaviour : MonoBehaviour
 {
     public Vector2 velo;
     Animator animator;
+    AudioSource audioSource;
     bool jumpedOn;
     void Start()
     {
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -21,6 +23,7 @@ public class TrampolineBehaviour : MonoBehaviour
         if (!other.CompareTag("Hazard"))
         {
             jumpedOn = true;
+            audioSource.Play();
             other.GetComponent<Rigidbody2D>().velocity = velo;
         }
     }

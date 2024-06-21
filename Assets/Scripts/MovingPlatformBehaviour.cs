@@ -1,11 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MovingPlatformBehaviour : MonoBehaviour
 {
-    [SerializeField] Vector2 direction;
-    [SerializeField] float distance;
+    public Vector2 direction;
+    public float distance;
     [SerializeField] float deltaMult;
+    AudioSource audioSource;
+    bool isMoving = false;
     bool isPlayerMoving;
     Vector2 initPos;
     Vector2 newPos;
@@ -17,6 +20,7 @@ public class MovingPlatformBehaviour : MonoBehaviour
     void Start()
     {
         activator = GetComponent<UniversalActivator>();
+        audioSource = GetComponent<AudioSource>();
         initPos = transform.position;
         newPos = initPos + direction * distance;
     }
@@ -25,6 +29,10 @@ public class MovingPlatformBehaviour : MonoBehaviour
     {
         Vector2 targetPos = activator.activated ? newPos : initPos;
         transform.position = Vector2.MoveTowards(transform.position, targetPos, deltaMult * Time.deltaTime);
+        StartCoroutine(CheckMoving());
+        if(!isMoving)
+            audioSource.Play();
+        
         if (Player != null && direction.x != 0)
         {
             Player.GetComponent<PlayerControl>().speed = (Vector2)transform.position == targetPos ? 2 : 4.5f;
@@ -55,6 +63,18 @@ public class MovingPlatformBehaviour : MonoBehaviour
                 targets[i].transform.position = (Vector2)transform.position + objectOffsets[i];
             }
         }
+    }
+
+    IEnumerator CheckMoving()
+    {
+        Vector2 a = transform.position; 
+        yield return new WaitForSeconds(0.1f);
+        Vector2 b = transform.position; 
+
+        if (a != b)
+            isMoving = true;
+        else
+            isMoving = false;
     }
 
     void OnTriggerStay2D(Collider2D other)
