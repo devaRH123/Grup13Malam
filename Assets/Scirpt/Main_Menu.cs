@@ -3,19 +3,19 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public void ContinueGame()
-    {
-        // Implement your continue logic here
-        // For example, you can load a specific scene where the game left off
-        SceneManager.LoadScene("ContinueScene");
-    }
-
-    public void StartNewGame()
+    public void Stage1()
     {
         // Load the first level or initial game scene
-        SceneManager.LoadScene("level1");
+        Debug.Log("tes tombol");
+        SceneManager.LoadScene("Stage1");
     }
 
+    public void Stage2()
+    {
+        // Load the first level or initial game scene
+        Debug.Log("tes tombol");
+        SceneManager.LoadScene("Stage2");
+    }
     public void QuitGame()
     {
         // Quit the application
